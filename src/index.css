@@ -1,0 +1,183 @@
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  background-color: green;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.horizontal-line {
+  border: 2px solid yellow;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+  padding: 0;
+  margin: 0;
+}
+
+.card {
+  display: inline-block;
+  text-align: center;
+  margin: 30px;
+  padding: 20px;
+  width: 120px;
+  height: 180px;
+  font-size: 20px;
+  background-color: white;
+  border: solid 1px black;
+}
+
+.flex-container {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  display: flex;
+  flex-flow: row wrap;
+  -webkit-flex-flow: row wrap;
+  justify-content: space-around;
+}
+
+.spades {
+  color: black;
+  font-size: 48px;
+}
+
+.clubs {
+  color: black;
+  font-size: 48px;
+}
+
+.hearts {
+  color: red;
+  font-size: 48px;
+}
+
+.diamonds {
+  color: red;
+  font-size: 48px;
+}
+
+.yellow {
+  color: yellow;
+}
+
+#casino-name {
+  text-align: center;
+  margin: 10px;
+}
+
+#pay-table {
+  background-color: blue;
+  color: yellow;
+  text-align: right;
+  font-weight: bold;
+  padding: 0;
+}
+
+#table-one {
+  background-color: blue;
+  color: yellow;
+  text-align: left;
+  font-weight: bold;
+}
+
+.selected {
+  background-color: red;
+  color: yellow;
+  text-align: right;
+  font-weight: bold;
+}
+
+.not-selected {
+  background-color: blue;
+  color: yellowgreen;
+  text-align: right;
+  font-weight: bold;
+}
+
+#hand-result {
+  color: yellow;
+  font-size: 24px;
+  font-weight: bold;
+  float: center;
+}
+
+#the-hand {
+  text-align: center;
+  height: 300px;
+}
+
+.discard-btn {
+  font-size: 24px;
+  border: 2px yellow;
+  background-color: red;
+  color: yellow;
+  margin: 5px;
+}
+
+.discard-btn-selected {
+  font-size: 24px;
+  border: 2px yellow;
+  background-color: red;
+  color: yellow;
+  margin: 5px;
+}
+
+#buttons {
+  float: center;
+}
+
+#help-btn {
+  background-color: white;
+  color: black;
+  font-size: 24px;
+}
+
+#bet-one-btn {
+  background-color: yellow;
+  color: black;
+  font-size: 24px;
+}
+
+#bet-amount {
+  color: yellow;
+  font-size: 24px;
+  font-weight: bold;
+  width: 150px;
+}
+
+.draw-btn {
+  background-color: red;
+  color: black;
+  font-size: 24px;
+  width: 100px;
+}
+
+.draw-btn-clicked {
+  background-color: blue;
+  color: black;
+  font-size: 24px;
+  width: 100px;
+}
+
+#bankroll {
+  color: yellow;
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.modal {
+  background-color: white;
+  width: 400px;
+}
+
+#close-modal-button {
+  background-color: red;
+}
+
+.hand-result {
+  color: yellow;
+  font-size: 24px;
+}
