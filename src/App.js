@@ -2,123 +2,109 @@ import React from "react";
 import CasinoName from "./CasinoName.js";
 import PayTable from "./PayTable.js";
 import HelpModal from "./HelpModal.js";
-import * as cardHelpers from "./helpers/cardHelpers.js";
-import * as cardLogic from "./helpers/cardLogic.js";
-import Card from "./card.js";
+import CardContainer from "./CardContainer.js";
 import ButtonLine from "./ButtonLine.js";
+import {generateDeck, shuffleDeck, sortHand} from "./helpers/cardHelpers.js";
+import cardLogic from './helpers/cardLogic'
+
+
+// you have several states which you don't exist in your inital state. 
+// all states should be set up initially with a default state.
 
 class App extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      deck: [],
-      hand: [],
-      betAmount: 1,
-      bankroll: 100,
-      showModal: false,
-      isDeal: true
-    };
-
-    this.betOne = this.betOne.bind(this);
-    this.dealFirstFiveCards = this.dealFirstFiveCards.bind(this);
-    this.discardToggle = this.discardToggle.bind(this);
-    this.discard = this.discard.bind(this);
-    this.toggleModal = this.toggleModal.bind(this);
+  state = {
+    deck: [],
+    hand: [],
+    betAmount: 1,
+    bankroll: 100,
+    showModal: false,
+    isDeal: true,
+    winAmount: null
+  }
+  
+  betOne = () => {
+    this.setState(prevState => {
+      const betAmount = prevState.betAmount < 5 ? prevState.betAmount + 1 : 1
+      return {betAmount}
+    })
   }
 
-  betOne() {
-    this.state.betAmount < 5
-      ? this.setState({ betAmount: this.state.betAmount + 1 })
-      : this.setState({ betAmount: 1 });
+  initialDeal = () => {
+    // don't set state multiple times in the same function, it is asynchronous
+    // were you removing used cards from the deck? i didn't see you updating that state
+    const newDeck = shuffleDeck(generateDeck())
+    this.dealCards(5, [], newDeck)
   }
 
-  dealFirstFiveCards() {
-    let deck = cardHelpers.generateDeck();
-    cardHelpers.shuffleDeck(deck);
-    this.setState({ deck: deck, isDeal: true });
-    let hand = deck.slice(0, 5);
-    cardHelpers.handSorter(hand);
-    this.setState({
-      deck,
-      hand,
-      isDeal: false
-    });
-  }
-
-  discardToggle(cardIndex) {
-    const hand = this.state.hand.map((card, index) => {
-      if (cardIndex === index) {
-        return { ...card, isChecked: !card.isChecked };
+  discardToggle = (discardCard) => {
+    const hand = this.state.hand.map(card => {
+      if (card === discardCard) {
+        return { ...card, discard: !card.discard };
       } else {
         return card;
       }
     });
-    this.setState({ hand, pokerResult: "", winAmount: "" });
+    this.setState({ hand });
   }
 
-  discard() {
-    let deck = this.state.deck;
-    let newHand = this.state.hand.filter(card => {
-      return card.isChecked === false;
-    });
+  dealCards = (count, prevHand, prevDeck) => {
+    const newCards = prevDeck.slice(0, count)
+    const deck = prevDeck.slice(count, prevDeck.length)
+    const hand = sortHand([...newCards, ...prevHand])
+    this.setState(prevState => ({
+      deck,
+      hand, 
+      isDeal: !prevState.isDeal
+    }))
+  }
+
+  discard = () => {
+    // it looks like you were calling poker logic on the previous hand, not the next state
+    const {deck, hand} = this.state
+    let newHand = hand.filter(card => !card.discard)
     let cardsNeeded = 5 - newHand.length;
-    for (let i = 0; i < cardsNeeded; i++) {
-      if (cardsNeeded) {
-        newHand = newHand.concat(deck.slice(5 + i, 5 + i + 1));
-      }
-    }
-    cardHelpers.handSorter(newHand);
-    this.setState({
-      isDeal: true,
-      hand: newHand,
-      pokerResult: cardLogic.cardLogic(this.state.hand)
-    });
+    
+    this.dealCards(cardsNeeded, newHand, deck)
   }
 
   toggleModal(prevState) {
-    this.setState({ showModal: !this.state.showModal });
+    this.setState(prevState => ({ showModal: !prevState.showModal }))
   }
 
   render() {
+    const {betAmount, hand, showModal, bankroll, isDeal} = this.state
+    const showResult = !!hand.length
+    console.log(this.state);
+    
     return (
       <React.Fragment>
         <CasinoName />
         <hr className="horizontal-line" />
         <div id="top" className="flex-container">
-          <div id="pay-table">
-            <PayTable betAmount={this.state.betAmount} />
-          </div>
-          <div id="hand-result">
-            {!!this.state.hand.length && cardLogic.cardLogic(this.state.hand)}
-          </div>
-
+          <PayTable betAmount={betAmount} />
+          {showResult && 
+            <div id="hand-result">
+              {cardLogic(hand)}
+            </div>
+          }
           <hr className="horizontal-line" />
           <HelpModal
-            showModal={this.state.showModal}
+            showModal={showModal}
             isOpen={this.toggleModal}
             onRequestClose={this.toggleModal}
           />
-          <div id="the-hand" className="flex-contianer">
-            {this.state.hand.map((card, cardIndex) => (
-              <Card
-                key={cardIndex}
-                card={card}
-                discardToggle={() => this.discardToggle(cardIndex)}
-              />
-            ))}
-          </div>
+          <CardContainer hand={hand} discardToggle={this.discardToggle} />
         </div>
         <hr className="horizontal-line" />
 
         <ButtonLine
           toggleModal={this.toggleModal}
           betOne={this.betOne}
-          dealFirstFiveCards={this.dealFirstFiveCards}
+          initialDeal={this.initialDeal}
           discard={this.discard}
-          betAmount={this.state.betAmount}
-          bankroll={this.state.bankroll}
-          isDeal={this.state.isDeal}
+          betAmount={betAmount}
+          bankroll={bankroll}
+          isDeal={isDeal}
         />
       </React.Fragment>
     );

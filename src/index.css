@@ -39,24 +39,16 @@ body {
   justify-content: space-around;
 }
 
-.spades {
+.icon {
+  font-size: 48px;
+}
+
+.black {
   color: black;
-  font-size: 48px;
 }
 
-.clubs {
-  color: black;
-  font-size: 48px;
-}
-
-.hearts {
+.red {
   color: red;
-  font-size: 48px;
-}
-
-.diamonds {
-  color: red;
-  font-size: 48px;
 }
 
 .yellow {
