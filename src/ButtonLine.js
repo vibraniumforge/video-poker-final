@@ -1,32 +1,28 @@
 import React from "react";
 
-function buttonLine(props) {
-  return (
-    <div>
-      <div id="buttons" className="flex-container">
-        <button id="help-btn" onClick={props.toggleModal}>
-          Help
-        </button>
-        <button id="bet-one-btn" onClick={props.betOne}>
-          Bet One
-        </button>
-        <span id="bet-amount">
-          Bet {props.betAmount} Coin
-          {props.betAmount === 1 ? " " : "s"}
-        </span>
-        <button
-          id="draw-btn"
-          className={props.isDeal === true ? "draw-btn" : "draw-btn-clicked"}
-          onClick={
-            props.isDeal === true ? props.dealFirstFiveCards : props.discard
-          }
-        >
-          {props.isDeal === true ? "Deal" : "Go"}
-        </button>
-        <span id="bankroll">{props.bankroll} Coins</span>
-      </div>
+export default ({toggleModal, betOne, betAmount, initialDeal, discard, bankroll, isDeal}) => (
+  <div>
+    <div id="buttons" className="flex-container">
+      <button id="help-btn" onClick={toggleModal}>
+        Help
+      </button>
+      <button id="bet-one-btn" onClick={betOne}>
+        Bet One
+      </button>
+      <span id="bet-amount">
+        Bet {betAmount} Coin
+        {betAmount === 1 ? " " : "s"}
+      </span>
+      <button
+        id="draw-btn"
+        className={isDeal ? "draw-btn" : "draw-btn-clicked"}
+        onClick={
+          isDeal ? initialDeal : discard
+        }
+      >
+        {isDeal ? "Deal" : "Go"}
+      </button>
+      <span id="bankroll">{bankroll} Coins</span>
     </div>
-  );
-}
-
-export default buttonLine;
+  </div>
+);
